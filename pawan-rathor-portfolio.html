@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pawan Rathor — Full Stack Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10141b;
+    --bg-raised: #161c26;
+    --bg-inset: #0b0e13;
+    --line: #262f3d;
+    --text: #e7ecf3;
+    --text-dim: #97a3b6;
+    --text-faint: #5c6b80;
+    --amber: #f2a93b;
+    --amber-dim: #f2a93b33;
+    --teal: #6fb8b0;
+    --ok: #7cc38f;
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --ease: cubic-bezier(.22,1,.36,1);
+    --ease-soft: cubic-bezier(.16,.8,.24,1);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--amber); color:#10141b; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ---------- scroll reveal ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .9s var(--ease-soft), transform .9s var(--ease-soft);
+    will-change:opacity, transform;
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal-stagger.in > *{ opacity:1; transform:translateY(0) scale(1); }
+  .reveal-stagger > *{
+    opacity:0; transform:translateY(18px) scale(.985);
+    transition:opacity .7s var(--ease-soft), transform .7s var(--ease-soft);
+  }
+  .reveal-stagger > *:nth-child(1){ transition-delay:.03s; }
+  .reveal-stagger > *:nth-child(2){ transition-delay:.11s; }
+  .reveal-stagger > *:nth-child(3){ transition-delay:.19s; }
+  .reveal-stagger > *:nth-child(4){ transition-delay:.27s; }
+  .reveal-stagger > *:nth-child(5){ transition-delay:.35s; }
+  .reveal-stagger > *:nth-child(6){ transition-delay:.43s; }
+
+  .wrap{ max-width:980px; margin:0 auto; padding:0 28px; }
+
+  /* ---------- top tab bar ---------- */
+  .tabbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(16,20,27,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .tabbar-inner{
+    max-width:980px; margin:0 auto; padding:0 28px;
+    display:flex; align-items:center; gap:2px; overflow-x:auto;
+  }
+  .tab{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--text-faint);
+    padding:13px 16px;
+    border-right:1px solid var(--line);
+    white-space:nowrap;
+    display:flex; align-items:center; gap:7px;
+    transition:color .35s var(--ease);
+    cursor:pointer;
+    position:relative;
+  }
+  .tab::after{
+    content:''; position:absolute; left:16px; right:16px; bottom:0; height:2px;
+    background:var(--amber); border-radius:2px;
+    transform:scaleX(0); transform-origin:left; transition:transform .4s var(--ease);
+  }
+  .tab:hover::after{ transform:scaleX(1); }
+  .tab .dot{ width:6px; height:6px; border-radius:50%; background:var(--text-faint); flex:none; transition:background .35s var(--ease), box-shadow .35s var(--ease); }
+  .tab:hover{ color:var(--text); }
+  .tab:hover .dot{ background:var(--amber); box-shadow:0 0 8px 1px #f2a93b66; }
+  .tab.brand{ color:var(--text); font-weight:600; padding-left:0; border-right:1px solid var(--line); padding-right:18px;}
+  .tab.brand .dot{ background:var(--amber); }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:88px 0 64px; }
+
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(22px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .hero-anim{ opacity:0; animation:rise .9s var(--ease-soft) forwards; }
+  .hero .eyebrow.hero-anim{ animation-delay:.05s; }
+  .hero h1.name.hero-anim{ animation-delay:.16s; }
+  .hero .role-line.hero-anim{ animation-delay:.27s; }
+  .hero .meta-row.hero-anim{ animation-delay:.38s; }
+  .hero .flow.hero-anim{ animation-delay:.5s; }
+
+  .eyebrow{
+    font-family:var(--font-mono); font-size:12.5px; color:var(--teal);
+    letter-spacing:.04em; margin-bottom:18px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:''; width:8px; height:8px; background:var(--ok); border-radius:50%; box-shadow:0 0 0 3px #7cc38f22; animation:pulse-dot 2.4s ease-in-out infinite; }
+  @keyframes pulse-dot{
+    0%,100%{ box-shadow:0 0 0 3px #7cc38f22; }
+    50%{ box-shadow:0 0 0 6px #7cc38f11; }
+  }
+
+  h1.name{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(40px, 7vw, 68px);
+    line-height:1.02;
+    letter-spacing:-0.02em;
+    margin-bottom:14px;
+    background:linear-gradient(100deg, var(--text) 45%, var(--text-dim) 85%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  h1.name .accent{ color:var(--amber); -webkit-text-fill-color:var(--amber); }
+
+  .role-line{
+    font-family:var(--font-display);
+    font-size:clamp(17px, 2.4vw, 22px);
+    color:var(--text-dim);
+    font-weight:500;
+    margin-bottom:26px;
+  }
+
+  .meta-row{
+    display:flex; flex-wrap:wrap; gap:10px 18px;
+    font-family:var(--font-mono); font-size:13px; color:var(--text-faint);
+    margin-bottom:44px;
+  }
+  .meta-row span{ display:flex; align-items:center; gap:7px; }
+  .meta-row a{ transition:color .3s var(--ease); }
+  .meta-row a:hover{ color:var(--amber); }
+
+  /* ---------- signature: request flow ---------- */
+  .flow{
+    background:var(--bg-inset);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px 24px 26px;
+    overflow:hidden;
+  }
+  .flow-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-mono); font-size:12px; color:var(--text-faint);
+    margin-bottom:20px;
+  }
+  .flow-head .req{ color:var(--text-dim); }
+  .flow-head .req .method{ color:var(--ok); font-weight:600; }
+  .flow-head .status{ color:var(--ok); }
+
+  .flow-diagram{
+    display:flex; align-items:center; justify-content:space-between;
+    position:relative;
+    padding:6px 0;
+  }
+  .node{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--text-dim);
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:7px;
+    padding:9px 13px;
+    text-align:center;
+    position:relative;
+    z-index:2;
+    flex:none;
+    white-space:nowrap;
+    transition:transform .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease);
+  }
+  .node:hover{ transform:translateY(-3px); border-color:var(--amber-dim); box-shadow:0 10px 24px -12px #000a; }
+  .node .sub{ display:block; font-size:10.5px; color:var(--text-faint); margin-top:2px; }
+  .node.hot{ border-color:var(--amber-dim); color:var(--amber); animation:glow-pulse 2.8s ease-in-out infinite; }
+  @keyframes glow-pulse{
+    0%,100%{ box-shadow:0 0 0 0 #f2a93b00; }
+    50%{ box-shadow:0 0 14px 1px #f2a93b33; }
+  }
+
+  .track{
+    flex:1;
+    height:1px;
+    background:var(--line);
+    position:relative;
+    margin:0 6px;
+    min-width:20px;
+  }
+  .packet{
+    position:absolute;
+    top:50%; left:0;
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--amber);
+    transform:translate(-3px,-50%);
+    box-shadow:0 0 8px 1px #f2a93b88;
+    animation:travel 3.2s linear infinite;
+  }
+  .track:nth-of-type(1) .packet{ animation-delay:0s; }
+  @keyframes travel{
+    0%{ left:0; opacity:0; }
+    8%{ opacity:1; }
+    92%{ opacity:1; }
+    100%{ left:100%; opacity:0; }
+  }
+
+  .flow-foot{
+    margin-top:18px; padding-top:16px; border-top:1px dashed var(--line);
+    font-family:var(--font-mono); font-size:12px; color:var(--text-faint);
+    display:flex; flex-wrap:wrap; gap:8px 22px;
+  }
+  .flow-foot b{ color:var(--text-dim); font-weight:500; }
+
+  @media (max-width:640px){
+    .flow-diagram{ flex-direction:column; align-items:stretch; gap:14px; }
+    .track{ width:1px; height:22px; margin:0 auto; }
+    .packet{ top:0; left:50%; transform:translate(-50%,-3px); animation-name:travel-v; }
+    @keyframes travel-v{
+      0%{ top:0; opacity:0; }
+      8%{ opacity:1; }
+      92%{ opacity:1; }
+      100%{ top:100%; opacity:0; }
+    }
+  }
+
+  /* ---------- section shell ---------- */
+  section{ padding:76px 0; border-top:1px solid var(--line); }
+  .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:38px; }
+  .sec-num{ font-family:var(--font-mono); font-size:13px; color:var(--text-faint); }
+  .sec-title{
+    font-family:var(--font-display); font-weight:600;
+    font-size:clamp(22px,3vw,28px); letter-spacing:-0.01em;
+  }
+
+  /* ---------- about ---------- */
+  .about-grid{ display:grid; grid-template-columns:1.4fr 1fr; gap:48px; }
+  .about-grid p{ color:var(--text-dim); font-size:15.5px; }
+  .about-grid p + p{ margin-top:14px; }
+  .about-grid strong{ color:var(--text); font-weight:600; }
+
+  .fact-list{ font-family:var(--font-mono); font-size:12.5px; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .fact-row{ display:flex; justify-content:space-between; padding:11px 15px; border-bottom:1px solid var(--line); }
+  .fact-row:last-child{ border-bottom:none; }
+  .fact-row .k{ color:var(--text-faint); }
+  .fact-row .v{ color:var(--text-dim); text-align:right; }
+
+  @media (max-width:760px){ .about-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- stack ---------- */
+  .stack-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .stack-col{ background:var(--bg); padding:22px 20px; transition:background .4s var(--ease); }
+  .stack-col:hover{ background:var(--bg-raised); }
+  .stack-col h4{
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--teal); margin-bottom:14px; font-weight:500;
+  }
+  .stack-col ul{ list-style:none; }
+  .stack-col li{ font-size:13.5px; color:var(--text-dim); padding:5px 0; transition:color .3s var(--ease), transform .3s var(--ease); }
+  .stack-col li:hover{ color:var(--text); transform:translateX(3px); }
+  @media (max-width:760px){ .stack-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:480px){ .stack-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- experience ---------- */
+  .timeline{ position:relative; }
+  .job{ display:grid; grid-template-columns:150px 1fr; gap:28px; padding:26px 0; border-bottom:1px solid var(--line); }
+  .job:last-child{ border-bottom:none; }
+  .job-when{ font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); padding-top:3px; }
+  .job-when .current{ color:var(--ok); }
+  .job-role{ font-family:var(--font-display); font-size:17px; font-weight:600; margin-bottom:3px; }
+  .job-org{ font-size:13.5px; color:var(--amber); margin-bottom:12px; font-family:var(--font-mono); }
+  .job ul{ list-style:none; }
+  .job li{ font-size:14px; color:var(--text-dim); padding-left:16px; position:relative; margin-bottom:7px; }
+  .job li::before{ content:'▸'; position:absolute; left:0; color:var(--text-faint); font-size:12px; }
+  @media (max-width:600px){ .job{ grid-template-columns:1fr; gap:8px; } }
+
+  /* ---------- projects ---------- */
+  .proj-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .proj-card{
+    background:var(--bg-raised); border:1px solid var(--line); border-radius:10px;
+    padding:22px; display:flex; flex-direction:column; gap:14px;
+    transition:border-color .45s var(--ease), transform .45s var(--ease), box-shadow .45s var(--ease);
+  }
+  .proj-card:hover{ border-color:var(--amber-dim); transform:translateY(-5px); box-shadow:0 18px 36px -18px #000c; }
+  .proj-name{ transition:color .3s var(--ease); }
+  .proj-card:hover .proj-name{ color:var(--amber); }
+  .proj-name{ font-family:var(--font-display); font-weight:600; font-size:16.5px; }
+  .proj-stack{ font-family:var(--font-mono); font-size:11px; color:var(--teal); }
+  .proj-desc{ font-size:13.5px; color:var(--text-dim); flex:1; }
+  .proj-links{ display:flex; gap:14px; font-family:var(--font-mono); font-size:12px; padding-top:10px; border-top:1px solid var(--line); }
+  .proj-links a{ color:var(--text-faint); display:flex; align-items:center; gap:5px; transition:color .15s ease; }
+  .proj-links a:hover{ color:var(--amber); }
+  @media (max-width:760px){ .proj-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- education ---------- */
+  .edu-row{ display:flex; justify-content:space-between; align-items:baseline; padding:18px 0; border-bottom:1px solid var(--line); gap:16px; flex-wrap:wrap; }
+  .edu-row:last-child{ border-bottom:none; }
+  .edu-title{ font-family:var(--font-display); font-weight:600; font-size:15.5px; }
+  .edu-org{ font-size:13.5px; color:var(--text-dim); margin-top:2px; }
+  .edu-when{ font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); text-align:right; }
+  .edu-score{ color:var(--amber); }
+
+  /* ---------- contact ---------- */
+  .contact{ text-align:center; padding:90px 0 100px; }
+  .contact .sec-head{ justify-content:center; }
+  .contact h2{
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(28px,4.5vw,42px); margin-bottom:16px; letter-spacing:-0.01em;
+  }
+  .contact p{ color:var(--text-dim); max-width:480px; margin:0 auto 34px; }
+  .contact-links{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+  .cbtn{
+    font-family:var(--font-mono); font-size:13px;
+    border:1px solid var(--line); border-radius:8px; padding:12px 20px;
+    color:var(--text-dim); transition:border-color .35s var(--ease), color .35s var(--ease), background .35s var(--ease), transform .35s var(--ease), box-shadow .35s var(--ease);
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .cbtn:hover{ border-color:var(--amber); color:var(--amber); transform:translateY(-2px); box-shadow:0 10px 24px -14px #f2a93b55; }
+  .cbtn.primary{ background:var(--amber); color:#10141b; border-color:var(--amber); font-weight:600; }
+  .cbtn.primary:hover{ background:transparent; color:var(--amber); }
+
+  footer{ border-top:1px solid var(--line); padding:26px 0; text-align:center; font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); }
+
+  a:focus-visible, .tab:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; border-radius:3px; }
+</style>
+</head>
+<body>
+
+<div class="tabbar">
+  <div class="tabbar-inner">
+    <div class="tab brand"><span class="dot"></span>pawan.dev</div>
+    <a class="tab" href="#about"><span class="dot"></span>about.md</a>
+    <a class="tab" href="#stack"><span class="dot"></span>stack.json</a>
+    <a class="tab" href="#experience"><span class="dot"></span>experience.log</a>
+    <a class="tab" href="#projects"><span class="dot"></span>projects/</a>
+    <a class="tab" href="#education"><span class="dot"></span>education.md</a>
+    <a class="tab" href="#contact"><span class="dot"></span>contact.sh</a>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow hero-anim">available for full-time roles · open to relocation</div>
+    <h1 class="name hero-anim">Pawan Rathor<span class="accent">.</span></h1>
+    <div class="role-line hero-anim">Full Stack Web Developer — Angular &amp; React.js · Node.js · Express.js · MongoDB</div>
+    <div class="meta-row hero-anim">
+      <span>📍 Gwalior, India</span>
+      <span>✆ <a href="tel:+918878423206">8878423206</a></span>
+      <span>✉ <a href="mailto:rathorpawan128@gmail.com">rathorpawan128@gmail.com</a></span>
+      <span>🔗 <a href="#" onclick="return false;">LinkedIn</a></span>
+      <span>🔗 <a href="#" onclick="return false;">GitHub</a></span>
+    </div>
+
+    <div class="flow hero-anim">
+      <div class="flow-head">
+        <span class="req"><span class="method">GET</span> /portfolio/pawan-rathor</span>
+        <span class="status">200 OK</span>
+      </div>
+      <div class="flow-diagram">
+        <div class="node">Client<span class="sub">browser</span></div>
+        <div class="track"><span class="packet"></span></div>
+        <div class="node hot">REST API<span class="sub">Express.js</span></div>
+        <div class="track"><span class="packet" style="animation-delay:.8s"></span></div>
+        <div class="node">Server<span class="sub">Node.js</span></div>
+        <div class="track"><span class="packet" style="animation-delay:1.6s"></span></div>
+        <div class="node">Database<span class="sub">MongoDB / MySQL</span></div>
+      </div>
+      <div class="flow-foot">
+        <span><b>auth:</b> JWT</span>
+        <span><b>pattern:</b> MVC</span>
+        <span><b>ops:</b> CRUD</span>
+        <span><b>latency:</b> production-ready</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="sec-num">01</span><span class="sec-title">About</span></div>
+    <div class="about-grid reveal">
+      <div>
+        <p>Full stack web developer with hands-on experience across both the <strong>Angular</strong> and <strong>React.js</strong> ecosystems. Currently building live production features with Angular, MySQL, and REST APIs at Ubitech Solutions, while independently developing MERN stack projects with real practical depth.</p>
+        <p>Comfortable working across the stack — from <strong>JWT authentication</strong> and CRUD operations to component-based UI development — with a solid foundation in database design and Git-based collaborative workflows. Looking to build scalable, high-quality web applications as part of a full-time Full Stack Developer role.</p>
+      </div>
+      <div class="fact-list">
+        <div class="fact-row"><span class="k">role</span><span class="v">Full Stack Developer</span></div>
+        <div class="fact-row"><span class="k">location</span><span class="v">Gwalior, India</span></div>
+        <div class="fact-row"><span class="k">relocation</span><span class="v">open</span></div>
+        <div class="fact-row"><span class="k">languages</span><span class="v">English, Hindi</span></div>
+        <div class="fact-row"><span class="k">focus</span><span class="v">Angular · MERN</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="sec-num">02</span><span class="sec-title">Technical Stack</span></div>
+    <div class="stack-grid reveal-stagger">
+      <div class="stack-col">
+        <h4>Frontend</h4>
+        <ul>
+          <li>React.js</li><li>Angular</li><li>JavaScript (ES6+)</li>
+          <li>HTML5 / CSS3</li><li>Bootstrap</li><li>Tailwind CSS</li>
+          <li>Responsive Design</li>
+        </ul>
+      </div>
+      <div class="stack-col">
+        <h4>Backend</h4>
+        <ul>
+          <li>Node.js</li><li>Express.js</li><li>REST API Development</li>
+          <li>JWT Authentication</li><li>MVC Architecture</li>
+        </ul>
+      </div>
+      <div class="stack-col">
+        <h4>Database</h4>
+        <ul>
+          <li>MongoDB</li><li>MongoDB Atlas</li><li>MySQL</li>
+        </ul>
+      </div>
+      <div class="stack-col">
+        <h4>Tools &amp; AI-Assisted Dev</h4>
+        <ul>
+          <li>Git / GitHub</li><li>VS Code</li><li>Postman</li>
+          <li>MySQL Workbench</li><li>Figma</li>
+          <li>Claude · ChatGPT · Qwen AI</li>
+          <li>GitHub Copilot · DeepSeek</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="sec-num">03</span><span class="sec-title">Experience</span></div>
+    <div class="timeline reveal-stagger">
+
+      <div class="job">
+        <div class="job-when">Dec 2025 — <span class="current">Present</span></div>
+        <div>
+          <div class="job-role">Software Developer — Full Stack (Angular / MySQL)</div>
+          <div class="job-org">Ubitech Solutions Pvt. Ltd., Gwalior, India</div>
+          <ul>
+            <li>Developing and maintaining Angular-based frontend modules for live production applications, improving UI responsiveness and usability.</li>
+            <li>Building and integrating REST APIs with backend services for smooth data flow between frontend and server layers.</li>
+            <li>Implementing and optimizing MySQL database operations, ensuring data integrity across CRUD workflows.</li>
+            <li>Enhancing UI/UX with Bootstrap and Tailwind CSS for consistent, mobile-responsive interfaces.</li>
+            <li>Collaborating with a 10-member cross-functional team in Agile, from requirement analysis to deployment.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-when">Oct 2024 — Nov 2024</div>
+        <div>
+          <div class="job-role">MERN Stack Developer Intern</div>
+          <div class="job-org">upDt Education Technology Pvt. Ltd.</div>
+          <ul>
+            <li>Developed full-stack features using React.js, Node.js, Express.js, and MongoDB for an EdTech platform.</li>
+            <li>Implemented CRUD operations and RESTful APIs to support core application functionality.</li>
+            <li>Improved backend data handling logic, boosting application performance and reliability.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-when">Aug 2024 — Sep 2024</div>
+        <div>
+          <div class="job-role">Frontend Developer Intern</div>
+          <div class="job-org">Prodigy Infotech</div>
+          <ul>
+            <li>Built responsive UI components using React.js and CSS, aligned with client design requirements.</li>
+            <li>Improved overall UI/UX based on stakeholder feedback and usability testing.</li>
+            <li>Identified and fixed layout and cross-device responsiveness issues.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="sec-num">04</span><span class="sec-title">Projects</span></div>
+    <div class="proj-grid reveal-stagger">
+
+      <div class="proj-card">
+        <div>
+          <div class="proj-name">Library Management System</div>
+          <div class="proj-stack">Angular · Express.js · MySQL</div>
+        </div>
+        <div class="proj-desc">Full-stack system with an Angular frontend and Express.js/MySQL backend. REST APIs designed across three core modules — Book Management, User Management, and Issue &amp; Return — with full frontend-backend integration.</div>
+        <div class="proj-links">
+          <a href="https://github.com/pawanrathor128/library_management" target="_blank" rel="noopener">↗ repo</a>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div>
+          <div class="proj-name">Job Portal Application</div>
+          <div class="proj-stack">MERN · React.js · Node.js · MongoDB</div>
+        </div>
+        <div class="proj-desc">Role-based authentication across three user roles — Admin, Recruiter, Candidate — with secure JWT login/signup. Includes job posting, application tracking, pagination, and end-to-end form validation.</div>
+        <div class="proj-links">
+          <a href="https://github.com/pawanrathor128/react-job-portal-main" target="_blank" rel="noopener">↗ repo</a>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div>
+          <div class="proj-name">Todo App</div>
+          <div class="proj-stack">MERN Stack</div>
+        </div>
+        <div class="proj-desc">Task management system with full CRUD operations, JWT authentication, and a responsive UI, built as separate frontend and backend services.</div>
+        <div class="proj-links">
+          <a href="https://github.com/pawanrathor128/todofrontend" target="_blank" rel="noopener">↗ frontend</a>
+          <a href="https://github.com/pawanrathor128/todobackend" target="_blank" rel="noopener">↗ backend</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="sec-num">05</span><span class="sec-title">Education</span></div>
+
+    <div class="reveal-stagger"><div class="edu-row">
+      <div>
+        <div class="edu-title">B.Tech, Computer Science Engineering</div>
+        <div class="edu-org">Shri Ram Institute of Information and Technology, Gwalior</div>
+      </div>
+      <div class="edu-when">2021 — 2025<br><span class="edu-score">CGPA 7.42</span></div>
+    </div>
+
+    <div class="edu-row">
+      <div>
+        <div class="edu-title">Class XII</div>
+        <div class="edu-org">MP Board</div>
+      </div>
+      <div class="edu-when">2021<br><span class="edu-score">88%</span></div>
+    </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="sec-num">06</span><span class="sec-title">Contact</span></div>
+    <h2 class="reveal">Let's build something.</h2>
+    <p class="reveal">Open to full-time Full Stack Developer roles and happy to relocate. Reach out directly — I usually reply within a day.</p>
+    <div class="contact-links reveal">
+      <a class="cbtn primary" href="mailto:rathorpawan128@gmail.com">✉ Email me</a>
+      <a class="cbtn" href="tel:+918878423206">✆ Call</a>
+      <a class="cbtn" href="#" onclick="return false;">↗ LinkedIn</a>
+      <a class="cbtn" href="#" onclick="return false;">↗ GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Pawan Rathor — built with Angular energy and React discipline.</footer>
+
+
+<script>
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) {
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(function(el){ io.observe(el); });
+  }
+</script>
+</body>
+</html>
